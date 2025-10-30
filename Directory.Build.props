@@ -1,0 +1,26 @@
+<Project>
+    <ItemGroup>
+        <!-- <PackageReference Include="StyleCop.Analyzers">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference> -->
+    </ItemGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <AnalysisMode>All</AnalysisMode>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+        <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <EnableStyleCopAnalyzers>true</EnableStyleCopAnalyzers>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Отключаем правило CA1515 для всего решения -->
+        <NoWarn>$(NoWarn);CA1515</NoWarn>
+    </PropertyGroup>
+</Project>
