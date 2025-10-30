@@ -19,6 +19,7 @@
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/Hotel.Api.csproj.CoreCompileInputs.cache
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/Hotel.Api.MvcApplicationPartsAssemblyInfo.cs
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/Hotel.Api.MvcApplicationPartsAssemblyInfo.cache
+/Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/Hotel.Api.sourcelink.json
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/rjimswa.dswa.cache.json
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/rjsmrazor.dswa.cache.json
 /Users/daytroy/Desktop/Coding/Hotel.Api/Hotel.Api/obj/Debug/net9.0/rjsmcshtml.dswa.cache.json
