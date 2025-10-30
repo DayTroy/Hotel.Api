@@ -4,7 +4,6 @@
   <a href="https://azimuthotels.com" target="blank"><img src="https://azimuthotels.com/images/upload/2-azimut%20(1).svg" width="120" alt="Azimut Hotels Logo" /></a>
   <a href="https://dotnet.microsoft.com/" target="blank"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Microsoft_.NET_logo.svg/1920px-Microsoft_.NET_logo.svg.png" width="120" alt=".NET Core Logo" /></a>
 </p>
-![alt text](image.png)
 Данный репозиторий содержит в себе реализацию серверной части веб-приложения для оказания гостиничных услуг в ООО "Азимут Хотелс Компани". Серверная часть разработанна с использованием .NET Core Проект предназначен для управления гостиницей, бронирования номеров и других связанных задач.
 
 ## Локальный запуск приложения
