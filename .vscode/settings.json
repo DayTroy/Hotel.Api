@@ -1,1 +1,14 @@
-{}
+{
+    "files.exclude": {
+        "**/bin": true,
+        "**/obj": true,
+        "**/.git": true,
+        "**/packages": true,
+        "**/*.suo": true,
+        "**/*.user": true
+    },
+    "search.exclude": {
+        "**/bin": true,
+        "**/obj": true
+    }
+}
