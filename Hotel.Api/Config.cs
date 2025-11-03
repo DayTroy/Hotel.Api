@@ -41,6 +41,8 @@ public class Config
         Description = "A simple hotel management API",
       });
     });
+
+    services.AddControllers();
   }
 
   /// <summary>

@@ -1,7 +1,12 @@
 ﻿namespace Hotel.Core.Entities;
 
-public class Guest
+/// <summary>
+/// Модель гостя.
+/// </summary>
+public sealed record Guest
 {
-  public required string Id;
-  public required string Name;
+  /// <summary>
+  /// Имя гостя.
+  /// </summary>
+  public string FirstName;
 }

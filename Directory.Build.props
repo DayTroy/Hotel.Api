@@ -1,10 +1,10 @@
 <Project>
-    <!-- <ItemGroup>
+    <ItemGroup>
         <PackageReference Include="StyleCop.Analyzers">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-    </ItemGroup> -->
+    </ItemGroup>
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -15,8 +15,10 @@
     <PropertyGroup>
         <NoWarn>$(NoWarn);CA1515</NoWarn>
         <NoWarn>$(NoWarn);CA1517</NoWarn>
+        <NoWarn>$(NoWarn);CS8618</NoWarn>
         <NoWarn>$(NoWarn);SA0001</NoWarn>
         <NoWarn>$(NoWarn);SA1200</NoWarn>
+        <NoWarn>$(NoWarn);SA1401</NoWarn>
         <NoWarn>$(NoWarn);SA1516</NoWarn>
         <NoWarn>$(NoWarn);SA1633</NoWarn>
     </PropertyGroup>
