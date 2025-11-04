@@ -1,7 +1,7 @@
-using Hotel.Core.Entities;
+using Hotel.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Hotel.Infrastructure;
+namespace Hotel.Infrastructure.Context;
 
 /// <summary>
 /// Контекст БД.
@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
   }
 
   /// <summary>
-  /// <see cref="Guest"/>Gets or sets .
+  /// <see cref="Room"/>Gets or sets .
   /// </summary>
-  public DbSet<Guest> Guests { get; set; }
+  public DbSet<Room> Room { get; set; }
 }

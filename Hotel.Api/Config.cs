@@ -1,11 +1,15 @@
-using Hotel.Infrastructure;
+using Hotel.Core.Interfaces;
+using Hotel.Core.Services;
+using Hotel.Core.Services.Abstract;
+using Hotel.Infrastructure.Context;
+using Hotel.Infrastructure.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
 namespace Hotel.Api;
 
 /// <summary>
-/// DependencyInjection.
+/// Config.
 /// </summary>
 public class Config
 {
@@ -29,8 +33,15 @@ public class Config
   /// <param name="services">The application configuration.</param>
   public void ConfigureServices(IServiceCollection services)
   {
+    ConfigureExternal(services);
+    ConfigureInternal(services);
+    services.AddControllers();
+  }
+
+  private void ConfigureExternal(IServiceCollection services)
+  {
     services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(this.Configuration.GetConnectionString("DefaultConnection")));
+      options.UseNpgsql(this.Configuration.GetConnectionString("DefaultConnection")));
 
     services.AddSwaggerGen(options =>
     {
@@ -41,8 +52,12 @@ public class Config
         Description = "A simple hotel management API",
       });
     });
+  }
 
-    services.AddControllers();
+  private void ConfigureInternal(IServiceCollection services)
+  {
+    services.AddScoped<IRoomService, RoomService>();
+    services.AddScoped<IRoomProvider, RoomProvider>();
   }
 
   /// <summary>

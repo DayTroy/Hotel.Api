@@ -7,7 +7,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hotel.Core\Hotel.Core.csproj" />
+    <ProjectReference Include="../Hotel.Core/Hotel.Core.csproj" />
   </ItemGroup>
-
 </Project>
