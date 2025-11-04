@@ -1,7 +1,6 @@
-using Hotel.Core.Mapping.Abstract;
+using Hotel.Core.Mapping.Interfaces;
 using Hotel.Core.Models;
 using Hotel.Infrastructure.Models;
-using Mapster;
 
 namespace Hotel.Infrastructure.Maps;
 
@@ -29,14 +28,4 @@ public class RoomModelToDboMap : IMapperConfig
       Status = origin.status,
     });
   }
-
-  /// <inheritdoc/>
-  // public void Register(TypeAdapterConfig config)
-  // {
-  //   config.NewConfig<RoomDbo, Room>()
-  //       .Map(dest => dest.RoomId, src => src.roomId)
-  //       .Map(dest => dest.RoomCategoryId, src => src.roomCategoryId)
-  //       .Map(dest => dest.Stage, src => src.stage)
-  //       .Map(dest => dest.Status, src => src.status);
-  // }
 }

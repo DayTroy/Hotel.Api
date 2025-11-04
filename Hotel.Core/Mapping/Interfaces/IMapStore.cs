@@ -1,4 +1,4 @@
-namespace Hotel.Core.Mapping.Abstract;
+namespace Hotel.Core.Mapping.Interfaces;
 
 /// <summary>
 /// Хранилище конфигураций маппинга между типами.

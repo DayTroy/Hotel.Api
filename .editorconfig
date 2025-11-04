@@ -19,6 +19,9 @@ indent_size = 2
 indent_size = 2
 insert_final_newline = true
 charset = utf-8-bom
+
+[**/*Dbo.cs]
+dotnet_diagnostic.SA1300.severity = none
 ###############################
 # .NET Coding Conventions     #
 ###############################

@@ -1,4 +1,4 @@
-namespace Hotel.Core.Mapping.Abstract;
+namespace Hotel.Core.Mapping.Interfaces;
 
 /// <summary>
 /// Интерфейс для работы с маппингом объектов между различными типами.

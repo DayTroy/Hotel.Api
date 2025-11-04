@@ -1,5 +1,5 @@
 using Hotel.Core.Interfaces;
-using Hotel.Core.Mapping.Abstract;
+using Hotel.Core.Mapping.Interfaces;
 using Hotel.Core.Models;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Models;

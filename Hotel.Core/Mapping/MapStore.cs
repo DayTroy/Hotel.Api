@@ -1,4 +1,4 @@
-using Hotel.Core.Mapping.Abstract;
+using Hotel.Core.Mapping.Interfaces;
 
 namespace Hotel.Core.Mapping;
 
