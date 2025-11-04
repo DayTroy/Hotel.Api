@@ -1,13 +1,14 @@
 using System.Reflection;
 using Hotel.Core.Interfaces;
 using Hotel.Core.Mapping;
-using Hotel.Core.Mapping.Abstract;
+using Hotel.Core.Mapping.Interfaces;
 using Hotel.Core.Services;
 using Hotel.Core.Services.Abstract;
 using Hotel.Infrastructure.Context;
 using Hotel.Infrastructure.Providers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace Hotel.Api.Extensions;
 
@@ -21,7 +22,7 @@ public static class ServiceCollectionExtensions
   /// </summary>
   /// <param name="services"><see cref="IServiceCollection"/>.</param>
   /// <returns><see cref="IServiceCollection"/>.</returns>
-  public static IServiceCollection AddCustomMappings(this IServiceCollection services)
+  public static IServiceCollection AddMappings(this IServiceCollection services)
   {
     services.AddSingleton<IMapStore, MapStore>();
     services.AddScoped<IMapper, Mapper>();
@@ -34,7 +35,7 @@ public static class ServiceCollectionExtensions
   /// </summary>
   /// <param name="services"><see cref="IServiceCollection"/>.</param>
   /// <returns><see cref="IServiceCollection"/>.</returns>
-  public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+  public static IServiceCollection AddSwagger(this IServiceCollection services)
   {
     services.AddSwaggerGen(options =>
     {
@@ -89,8 +90,9 @@ public static class ServiceCollectionExtensions
     using var scope = app.ApplicationServices.CreateScope();
     var mapStore = scope.ServiceProvider.GetRequiredService<IMapStore>();
     var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
-    Console.WriteLine("🔍 Поиск конфигураций маппинга...");
+    logger.LogInformation("🔍 Поиск конфигураций маппинга...");
 
     try
     {
@@ -99,9 +101,9 @@ public static class ServiceCollectionExtensions
 
       foreach (var assembly in assemblies)
       {
-        if (assembly.FullName.StartsWith("System.") ||
-            assembly.FullName.StartsWith("Microsoft.") ||
-            assembly.FullName.StartsWith("netstandard"))
+        if (assembly.FullName?.StartsWith("System.") == true ||
+            assembly.FullName?.StartsWith("Microsoft.") == true ||
+            assembly.FullName?.StartsWith("netstandard") == true)
         {
           continue;
         }
@@ -116,39 +118,39 @@ public static class ServiceCollectionExtensions
 
           if (configTypes.Any())
           {
-            Console.WriteLine($"📦 Сборка: {assembly.GetName().Name}");
+            logger.LogDebug("Сканируем сборку: {AssemblyName}", assembly.GetName().Name);
 
             foreach (var configType in configTypes)
             {
               try
               {
-                var config = (IMapperConfig)Activator.CreateInstance(configType);
-                config.AddMaps(mapStore, mapper);
-                Console.WriteLine($"   ✅ {configType.Name}");
+                var config = (IMapperConfig?)Activator.CreateInstance(configType);
+                config?.AddMaps(mapStore, mapper);
+                logger.LogInformation("✅ Загружен маппинг: {ConfigName}", configType.Name);
                 totalConfigs++;
               }
               catch (Exception ex)
               {
-                Console.WriteLine($"   ❌ {configType.Name}: {ex.Message}");
+                logger.LogError(ex, "❌ Ошибка загрузки {ConfigName}", configType.Name);
               }
             }
           }
         }
         catch (ReflectionTypeLoadException ex)
         {
-          Console.WriteLine($"⚠️ Ошибка загрузки типов из {assembly.GetName().Name}: {ex.Message}");
+          logger.LogWarning(ex, "Ошибка загрузки типов из {AssemblyName}", assembly.GetName().Name);
         }
         catch (Exception ex)
         {
-          Console.WriteLine($"⚠️ Ошибка сканирования {assembly.GetName().Name}: {ex.Message}");
+          logger.LogWarning(ex, "Ошибка сканирования {AssemblyName}", assembly.GetName().Name);
         }
       }
 
-      Console.WriteLine($"🎯 Загружено конфигураций: {totalConfigs}");
+      logger.LogInformation("🎯 Загружено конфигураций маппинга: {TotalConfigs}", totalConfigs);
     }
     catch (Exception ex)
     {
-      Console.WriteLine($"💥 Критическая ошибка инициализации маппингов: {ex}");
+      logger.LogCritical(ex, "💥 Критическая ошибка инициализации маппингов");
       throw;
     }
 

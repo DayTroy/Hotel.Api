@@ -1,14 +1,23 @@
 using Hotel.Api.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("logs/hotel.txt")
+    .CreateLogger();
+
+var connectionString = configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found");
+
 builder.Services
-    .AddDatabase(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .AddDatabase(connectionString)
     .AddHotelServices()
-    .AddCustomMappings()
-    .AddCustomSwagger()
+    .AddMappings()
+    .AddSwagger()
     .AddControllers();
 
 var app = builder.Build();
