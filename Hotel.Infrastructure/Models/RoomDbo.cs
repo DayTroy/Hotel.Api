@@ -1,27 +1,30 @@
-namespace Hotel.Core.Models;
+using System.ComponentModel.DataAnnotations;
+
+namespace Hotel.Infrastructure.Models;
 
 /// <summary>
-/// Модель гостиничного номера.
+/// Модель гостиничного номера в БД.
 /// </summary>
-public sealed record Room
+public sealed record RoomDbo
 {
   /// <summary>
   /// Номер комнаты.
   /// </summary>
-  public string RoomId { get; set; }
+  [Key]
+  public string roomId { get; set; }
 
   /// <summary>
   /// Статус гостиничного номера.
   /// </summary>
-  public string Status { get; set; }
+  public string status { get; set; }
 
   /// <summary>
   /// Этаж.
   /// </summary>
-  public int Stage { get; set; }
+  public int stage { get; set; }
 
   /// <summary>
   /// Номер категории гостиничного номера.
   /// </summary>
-  public string RoomCategoryId { get; set; }
+  public string roomCategoryId { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Mapster" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />

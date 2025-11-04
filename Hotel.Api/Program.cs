@@ -1,15 +1,33 @@
-using Hotel.Api;
+using Hotel.Api.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-var config = new Config(builder.Configuration);
+var configuration = builder.Configuration;
 
-config.ConfigureServices(builder.Services);
+builder.Services
+    .AddDatabase(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .AddHotelServices()
+    .AddCustomMappings()
+    .AddCustomSwagger()
+    .AddControllers();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.InitializeMappings();
+
+if (app.Environment.IsDevelopment())
+{
+  app.UseDeveloperExceptionPage();
+  app.UseSwagger();
+  app.UseSwaggerUI(options =>
+  {
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel API v1");
+    options.RoutePrefix = string.Empty;
+  });
+}
+
 app.UseHttpsRedirection();
+app.UseRouting();
 app.MapControllers();
 
 app.Run();

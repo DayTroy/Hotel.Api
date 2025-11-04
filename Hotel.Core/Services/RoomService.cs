@@ -26,7 +26,6 @@ public class RoomService : IRoomService
   /// <returns>.</returns>
   public async Task<List<Room>> GetAllRoomsAsync()
   {
-    // TODO: Добавить мапперы.
     var rooms = await _roomProvider.GetAllRoomsAsync();
     return rooms;
   }

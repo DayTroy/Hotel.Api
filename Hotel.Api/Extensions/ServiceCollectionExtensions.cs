@@ -1,0 +1,157 @@
+using System.Reflection;
+using Hotel.Core.Interfaces;
+using Hotel.Core.Mapping;
+using Hotel.Core.Mapping.Abstract;
+using Hotel.Core.Services;
+using Hotel.Core.Services.Abstract;
+using Hotel.Infrastructure.Context;
+using Hotel.Infrastructure.Providers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+
+namespace Hotel.Api.Extensions;
+
+/// <summary>
+/// Класс для DI.
+/// </summary>
+public static class ServiceCollectionExtensions
+{
+  /// <summary>
+  /// Добавление маппинга.
+  /// </summary>
+  /// <param name="services"><see cref="IServiceCollection"/>.</param>
+  /// <returns><see cref="IServiceCollection"/>.</returns>
+  public static IServiceCollection AddCustomMappings(this IServiceCollection services)
+  {
+    services.AddSingleton<IMapStore, MapStore>();
+    services.AddScoped<IMapper, Mapper>();
+
+    return services;
+  }
+
+  /// <summary>
+  /// Добавление сваггера.
+  /// </summary>
+  /// <param name="services"><see cref="IServiceCollection"/>.</param>
+  /// <returns><see cref="IServiceCollection"/>.</returns>
+  public static IServiceCollection AddCustomSwagger(this IServiceCollection services)
+  {
+    services.AddSwaggerGen(options =>
+    {
+      options.SwaggerDoc("v1", new OpenApiInfo
+      {
+        Title = "Hotel API",
+        Version = "v1",
+        Description = "API для управления отелем",
+        Contact = new OpenApiContact
+        {
+          Name = "Hotel Team",
+          Email = "hotel@example.com",
+        },
+      });
+    });
+
+    return services;
+  }
+
+  /// <summary>
+  /// Добавление внутренних сервисов.
+  /// </summary>
+  /// <param name="services"><see cref="IServiceCollection"/>.</param>
+  /// <returns><see cref="IServiceCollection"/>.</returns>
+  public static IServiceCollection AddHotelServices(this IServiceCollection services)
+  {
+    services.AddScoped<IRoomService, RoomService>();
+    services.AddScoped<IRoomProvider, RoomProvider>();
+    return services;
+  }
+
+  /// <summary>
+  /// Добавление БД.
+  /// </summary>
+  /// <param name="services"><see cref="IServiceCollection"/>.</param>
+  /// <param name="connectionString">Подключение.</param>
+  /// <returns><see cref="IServiceCollection"/>.</returns>
+  public static IServiceCollection AddDatabase(this IServiceCollection services, string connectionString)
+  {
+    services.AddDbContext<AppDbContext>(options =>
+        options.UseNpgsql(connectionString));
+    return services;
+  }
+
+  /// <summary>
+  /// Инициализация маппинга.
+  /// </summary>
+  /// <param name="app"><see cref="IApplicationBuilder"/>.</param>
+  /// <returns><see cref="IApplicationBuilder"/>.</returns>
+  public static IApplicationBuilder InitializeMappings(this IApplicationBuilder app)
+  {
+    using var scope = app.ApplicationServices.CreateScope();
+    var mapStore = scope.ServiceProvider.GetRequiredService<IMapStore>();
+    var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+    Console.WriteLine("🔍 Поиск конфигураций маппинга...");
+
+    try
+    {
+      var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+      var totalConfigs = 0;
+
+      foreach (var assembly in assemblies)
+      {
+        if (assembly.FullName.StartsWith("System.") ||
+            assembly.FullName.StartsWith("Microsoft.") ||
+            assembly.FullName.StartsWith("netstandard"))
+        {
+          continue;
+        }
+
+        try
+        {
+          var configTypes = assembly.GetTypes()
+              .Where(t => t.IsClass &&
+                         !t.IsAbstract &&
+                         typeof(IMapperConfig).IsAssignableFrom(t))
+              .ToList();
+
+          if (configTypes.Any())
+          {
+            Console.WriteLine($"📦 Сборка: {assembly.GetName().Name}");
+
+            foreach (var configType in configTypes)
+            {
+              try
+              {
+                var config = (IMapperConfig)Activator.CreateInstance(configType);
+                config.AddMaps(mapStore, mapper);
+                Console.WriteLine($"   ✅ {configType.Name}");
+                totalConfigs++;
+              }
+              catch (Exception ex)
+              {
+                Console.WriteLine($"   ❌ {configType.Name}: {ex.Message}");
+              }
+            }
+          }
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+          Console.WriteLine($"⚠️ Ошибка загрузки типов из {assembly.GetName().Name}: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+          Console.WriteLine($"⚠️ Ошибка сканирования {assembly.GetName().Name}: {ex.Message}");
+        }
+      }
+
+      Console.WriteLine($"🎯 Загружено конфигураций: {totalConfigs}");
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"💥 Критическая ошибка инициализации маппингов: {ex}");
+      throw;
+    }
+
+    return app;
+  }
+}

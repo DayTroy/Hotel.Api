@@ -1,4 +1,4 @@
-using Hotel.Core.Models;
+using Hotel.Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hotel.Infrastructure.Context;
@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
   }
 
   /// <summary>
-  /// <see cref="Room"/>Gets or sets .
+  /// <see cref="RoomDbo"/>.
   /// </summary>
-  public DbSet<Room> Room { get; set; }
+  public DbSet<RoomDbo> Room { get; set; }
 }
